@@ -1,4 +1,6 @@
 @if (!$comments->isEmpty())
+	{{-- Lazy eager load the user data for each comment, this is for --}}
+	{{-- performance reasons to mitigate against the n+1 query problem --}}
 	<?php $comments->load('user'); ?>
 	<ol class="comments--list">
 		@foreach ($comments as $comment)

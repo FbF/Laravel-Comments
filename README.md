@@ -81,6 +81,18 @@ To use in conjunction with fbf/laravel-blog, (or the model in any other package 
  readme about extending the Post model in your own app. I.e. you need to extend the Post model in your app/models directory
  and add the relationship in that file, rather than adding this to the model file in the vendor directory.
 
+## To note...
+
+To make integration really easy, and to increase performance, there's a line in the `list.blade.php` view partial that lazy eager
+ loads the user data for each comment. If you override this view partial, and you omit this line, when you try to show the
+ username of the user who wrote each comment, you may cause a big performance hit on your database, as it makes a separate
+ query for each comment's author:
+
+```php
+{{-- Lazy eager load the user data for each comment, this is for --}}
+{{-- performance reasons to mitigate against the n+1 query problem --}}
+<?php $comments->load('user'); ?>
+```
 
 ## Extending
 
