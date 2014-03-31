@@ -1,0 +1,25 @@
+{
+    "name": "fbf/laravel-comments",
+    "description": "",
+    "authors": [
+        {
+            "name": "Neil Crookes",
+            "email": "neil.crookes@fivebyfiveuk.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/controllers",
+            "src/migrations",
+            "src/models"
+        ],
+        "psr-0": {
+            "Fbf\\LaravelComments\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
