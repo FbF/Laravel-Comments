@@ -74,6 +74,14 @@ Add the comments partial to the blade templates where you want the comments disp
 @include('laravel-comments::comments', array('commentable' => $post, 'comments' => $post->comments))
 ```
 
+The above is an example for adding comments to a Post model. If you want comments on something else, obviously change
+ the mentions of the word 'Post' or '$post' to that of your model.
+
+To use in conjunction with fbf/laravel-blog, (or the model in any other package for that matter), see the section in the
+ readme about extending the Post model in your own app. I.e. you need to extend the Post model in your app/models directory
+ and add the relationship in that file, rather than adding this to the model file in the vendor directory.
+
+
 ## Extending
 
 The `laravel-comments::comments` partial used above actually includes 2 other partials, `laravel-comments::list` and
