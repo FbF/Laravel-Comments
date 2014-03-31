@@ -73,6 +73,11 @@ class Comment extends \Eloquent {
 
 	}
 
+	public function getCommentForAdministratorAttribute($value)
+	{
+		return \Str::limit(htmlspecialchars($this->comment, null, 'UTF-8'), 50);
+	}
+
 	public function getUrl()
 	{
 		$commentable = $this->commentable;

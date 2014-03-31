@@ -32,14 +32,21 @@ return array(
 		'user_id' => array(
 			'title' => 'User',
 			'relationship' => 'user', //this is the name of the Eloquent relationship method!
-			'select' => "(:table).username",
+			'select' => "CONCAT((:table).username, ' / ', (:table).email)",
 		),
-		'comment' => array(
+		'comment_for_administrator' => array(
 			'title' => 'Comment',
-			'select' => 'LEFT(comment,50)',
+			'select' => 'comment',
+		),
+		'commentable_type' => array(
+			'title' => 'Type',
+			'editable' => false,
+		),
+		'on_title' => array(
+			'title' => 'Title',
 		),
 		'created_at' => array(
-			'title' => 'Last Updated'
+			'title' => 'Created'
 		),
 	),
 
@@ -49,14 +56,8 @@ return array(
 	 * @type array
 	 */
 	'edit_fields' => array(
-		'user' => array(
-			'type' => 'relationship',
-			'title' => 'User',
-			'name_field' => 'username', //what column or accessor on the other table you want to use to represent this object
-			'editable' => false,
-		),
 		'comment' => array(
-			'title' => 'Title',
+			'title' => 'Comment',
 			'type' => 'textarea',
 		),
 		'created_at' => array(
@@ -77,12 +78,6 @@ return array(
 	 * @type array
 	 */
 	'filters' => array(
-		'user' => array(
-			'type' => 'relationship',
-			'title' => 'User',
-			'name_field' => 'username',
-			'options_sort_field' => 'username',
-		),
 		'comment' => array(
 			'type' => 'text',
 			'title' => 'Content',
@@ -131,5 +126,15 @@ return array(
 				return false;
 			}
 	),
+
+	/**
+	 * If provided, this is run to construct the front-end link for your model
+	 *
+	 * @type function
+	 */
+	'link' => function($model)
+		{
+			return $model->getUrl();
+		},
 
 );
