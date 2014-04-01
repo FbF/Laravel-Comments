@@ -30,6 +30,7 @@ class CommentsController extends \BaseController {
 	/**
 	 * Saves a comment
 	 *
+	 * @throws Exception
 	 * @return \Redirect
 	 */
 	public function create()
@@ -55,20 +56,13 @@ class CommentsController extends \BaseController {
 			{
 				throw new Exception();
 			}
-			$commentableObj = new $commentableType;
-			$table = $commentableObj->getTable();
-			$key = $commentableObj->getKeyName();
 			$data = array(
 				'commentable_type' => $commentableType,
 				'commentable_id' => $commentableId,
 				'comment' => Input::get('comment'),
 				'user_id' => Auth::user()->id,
 			);
-			$rules = array(
-				'commentable_type' => 'required|in:'.implode(',', Config::get('laravel-comments::commentables')),
-				'commentable_id' => 'required|exists:'.$table.','.$key,
-				'comment' => 'required',
-			);
+			$rules = $this->comment->getRules($commentableType);
 			$validator = Validator::make($data, $rules);
 			if ($validator->fails())
 			{

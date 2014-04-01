@@ -4,12 +4,14 @@ class Comment extends \Eloquent {
 
 	/**
 	 * Name of the table to use for this model
+	 *
 	 * @var string
 	 */
 	protected $table = 'fbf_comments';
 
 	/**
 	 * The fields that are fillable
+	 *
 	 * @var array
 	 */
 	protected $fillable = array(
@@ -21,6 +23,7 @@ class Comment extends \Eloquent {
 
 	/**
 	 * Defines polymorphic relationship type
+	 *
 	 * @return mixed
 	 */
 	public function commentable()
@@ -30,6 +33,7 @@ class Comment extends \Eloquent {
 
 	/**
 	 * Defines the belongsTo relationship
+	 *
 	 * @return mixed
 	 */
 	public function user()
@@ -73,11 +77,42 @@ class Comment extends \Eloquent {
 
 	}
 
+	/**
+	 * Accessor. Returns a truncated and escaped comment string for use in the administrator package index
+	 *
+	 * @param $value
+	 * @return string
+	 */
 	public function getCommentForAdministratorAttribute($value)
 	{
-		return \Str::limit(htmlspecialchars($this->comment, null, 'UTF-8'), 50);
+		return \Str::limit(htmlspecialchars($value, null, 'UTF-8'), 50);
 	}
 
+	/**
+	 * Returns the validation rules for the comment
+	 *
+	 * @param string $commentableType The namespaced model that is being commented on
+	 * @return array
+	 */
+	public function getRules($commentableType)
+	{
+		$commentableObj = new $commentableType;
+		$table = $commentableObj->getTable();
+		$key = $commentableObj->getKeyName();
+		$rules = array(
+			'commentable_type' => 'required|in:'.implode(',', Config::get('laravel-comments::commentables')),
+			'commentable_id' => 'required|exists:'.$table.','.$key,
+			'comment' => 'required',
+		);
+		return $rules;
+	}
+
+	/**
+	 * Returns the URL of the comment constructed based on the URL of the commentable object, plus the anchor of the
+	 * comment
+	 *
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		$commentable = $this->commentable;
@@ -93,6 +128,7 @@ class Comment extends \Eloquent {
 
 	/**
 	 * Returns the locale formatted date
+	 *
 	 * @return string
 	 */
 	public function getDate()
