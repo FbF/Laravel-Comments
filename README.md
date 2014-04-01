@@ -113,3 +113,48 @@ App::bind('Fbf\LaravelComments\CommentsController', function() {
 
 You can choose not to use the package routes file and use your own, for routing through to your own controller to handle
  the creation of comments, which you may wish to extend from the package's controller or not.
+
+### Example to use webpurify to replace profanities in comments with asterisks on create
+
+* Install https://github.com/agencyrepublic/webpurify via composer
+* Sign up for an API key https://www.webpurify.com/
+* Override the comment model in the package (create `app/models/comment.php`):
+
+```php
+<?php
+
+class Comment extends Fbf\LaravelComments\Comment {
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::creating(function($comment)
+		{
+			$apiKey = Config::get('webpurify.api_key');
+			$webPurifyText = new WebPurify\WebPurifyText($apiKey);
+			$comment->comment = $webPurifyText->replace($comment->comment);
+		});
+
+	}
+
+}
+```
+
+* Ensure your new model is the one that is used by the controller, rather than the package model (in `app/start/global.php`):
+
+```php
+App::bind('Fbf\LaravelComments\CommentsController', function() {
+    return new Fbf\LaravelComments\CommentsController(new Comment);
+});
+```
+
+* Add your API key to a config file (`app/config/webpurify.php`):
+
+```php
+<?php
+
+return array(
+	'api_key' => 'your_api_key_goes_here',
+);
+```
