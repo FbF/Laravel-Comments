@@ -1,5 +1,7 @@
 <?php namespace Fbf\LaravelComments;
 
+use \Config;
+
 class Comment extends \Eloquent {
 
 	/**
