@@ -1,6 +1,7 @@
 <?php namespace Fbf\LaravelComments;
 
-use \Config;
+use \Config,
+	\Lang;
 
 class Comment extends \Eloquent {
 
@@ -129,14 +130,20 @@ class Comment extends \Eloquent {
 	}
 
 	/**
-	 * Returns the locale formatted date
+	 * Returns the locale formatted date, in the locale's timezone, both of which can be overridden in the language file
 	 *
 	 * @return string
 	 */
 	public function getDate()
 	{
 		$date = $this->created_at;
-		$date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date);
+		if (Lang::has('laravel-comments::messages.date_timezone'))
+		{
+			$oldTimezone = date_default_timezone_get();
+			$newTimezone = Lang::get('laravel-comments::messages.date_timezone');
+			$date->setTimezone($newTimezone);
+			date_default_timezone_set($newTimezone);
+		}
 		$locale = \App::getLocale();
 		if (Lang::has('laravel-comments::messages.date_locale'))
 		{
@@ -149,6 +156,10 @@ class Comment extends \Eloquent {
 			$dateFormat = '%e %B %Y at %H:%M';
 		}
 		$date = $date->formatLocalized($dateFormat);
+		if (Lang::has('laravel-comments::messages.date_timezone'))
+		{
+			date_default_timezone_set($oldTimezone);
+		}
 		return $date;
 	}
 
