@@ -20,5 +20,6 @@ return array(
 	'unexpected_error' => 'An unexpected error has occurred and your comment could not be added, please try again later',
 
 	'date_format' => '%e %B %Y at %H:%M',
+	'date_locale' => 'fr_FR.UTF-8',
 
 );

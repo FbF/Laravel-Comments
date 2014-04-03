@@ -137,7 +137,12 @@ class Comment extends \Eloquent {
 	{
 		$date = $this->created_at;
 		$date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date);
-		setlocale(LC_TIME, \App::getLocale());
+		$locale = \App::getLocale();
+		if (Lang::has('laravel-comments::messages.date_locale'))
+		{
+			$locale = Lang::get('laravel-comments::messages.date_locale');
+		}
+		setlocale(LC_TIME, $locale);
 		$dateFormat = trans('laravel-comments::messages.date_format');
 		if ($dateFormat == 'laravel-comments::messages.date_format')
 		{
