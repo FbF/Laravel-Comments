@@ -1,6 +1,8 @@
 {
     "name": "fbf/laravel-comments",
-    "description": "",
+    "description": "A Laravel 4 package for adding commenting to a website that has user accounts",
+    "keywords": ["laravel","comments"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Neil Crookes",
