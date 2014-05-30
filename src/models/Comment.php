@@ -57,6 +57,11 @@ class Comment extends \Eloquent {
 	{
 		$commentable = $this->commentable;
 
+        if ( ! is_object($commentable) || ! method_exists($commentable, 'getAttributes') )
+        {
+            return FALSE;
+        }
+
 		$attributes = $commentable->getAttributes();
 
 		if (method_exists($commentable, 'getCommentableTitle'))
